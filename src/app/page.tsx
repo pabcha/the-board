@@ -11,6 +11,8 @@ export default function Home() {
     console.log("Lgoni")
   };
 
+  // https://github.com/jherr/supabase-chat/blob/main/src/app/ChatClient.tsx
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded shadow-md w-96">
