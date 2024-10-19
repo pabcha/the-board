@@ -5,7 +5,7 @@ export default function Header() {
     <header>
       <nav className="bg-black p-4">
         <ul className="flex space-x-4">
-        <li>
+          <li>
             <Link href="/" className="text-white hover:text-gray-400">
               Home
             </Link>

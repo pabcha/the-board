@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createClient, RealtimeChannel } from "@supabase/supabase-js";
 
+// https://github.com/jherr/supabase-chat/blob/main/src/app/ChatClient.tsx
 export default function Profile() {
   const [name, setName] = useState('');
   const [showScores, setShowScores] = useState(true);
