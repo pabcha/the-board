@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { createClient, RealtimeChannel } from "@supabase/supabase-js";
+import { RealtimeChannel } from "@supabase/supabase-js";
+import { supabase } from "../_lib/supabase";
 import { useUser } from "@clerk/nextjs";
 
-// https://github.com/jherr/supabase-chat/blob/main/src/app/ChatClient.tsx
 export default function Profile() {
   const { user, isSignedIn } = useUser();
   const [showScores, setShowScores] = useState(true);
@@ -12,12 +12,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (!channel.current) {
-      const client = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
-
-      channel.current = client.channel("poker-room", {
+      channel.current = supabase.channel("poker-room", {
         config: {
           broadcast: {
             self: true,
