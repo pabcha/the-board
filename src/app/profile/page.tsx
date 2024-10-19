@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { createClient, RealtimeChannel } from "@supabase/supabase-js";
+import { useUser } from "@clerk/nextjs";
 
 // https://github.com/jherr/supabase-chat/blob/main/src/app/ChatClient.tsx
 export default function Profile() {
-  const [name, setName] = useState('');
+  const { user, isSignedIn } = useUser();
   const [showScores, setShowScores] = useState(true);
   const [points, setPoints] = useState<Map<string, number | string>>(new Map());
   const channel = useRef<RealtimeChannel | null>(null);
@@ -26,7 +27,6 @@ export default function Profile() {
 
       channel.current
         .on("broadcast", { event: "point" }, ({ payload }) => {
-          console.log("Log point", payload);
           setPoints((prevPointsMap) => {
             const updatedPointsMap = new Map(prevPointsMap);
             updatedPointsMap.set(payload.point.user, payload.point.value);
@@ -44,20 +44,16 @@ export default function Profile() {
   const toggleScores = () => setShowScores(!showScores);
 
   function handleClick(value: string | number) {
-    if (!channel.current || !name) return;
+    if (!channel.current || !isSignedIn) return;
     channel.current.send({
       type: "broadcast",
       event: "point",
-      payload: { point: { value, user: name || 'giana' } },
+      payload: { point: { value, user: user.username } },
     });
   }
 
   return (
     <main className="bg-gray-100">
-      <div>
-        <label htmlFor="name">Nombre:</label>
-        <input type="text" value={name} onChange={(e) => setName(e.currentTarget.value)} id="name" />
-      </div>
       <div>
         <button onClick={toggleScores}
           className="mt-4 bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600">
