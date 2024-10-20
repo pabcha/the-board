@@ -38,8 +38,30 @@ export default function RoomsComponent({ rooms: roomsProp }: Props) {
     }
   }, [setRooms]);
 
-  function handleClick(value: string) {
-    console.log("value", value);
+  async function handleClick(value: string) {
+    const { data } = await supabase
+      .from('cards')
+      .select()
+      .eq('user', 'pablo')
+      .eq('room_id', 'a22ae03b-ba13-4ee3-81d9-818ca6465a8e');
+
+    if (!data?.length) {
+      // insert if not exist
+      await supabase
+        .from('cards')
+        .insert({ 
+          user: 'pablo', 
+          room_id: 'a22ae03b-ba13-4ee3-81d9-818ca6465a8e',
+          estimation: value
+        });
+    } else {
+      // update if exist
+      await supabase
+        .from('cards')
+        .update({ estimation: value })
+        .eq('user', 'pablo')
+        .eq('room_id', 'a22ae03b-ba13-4ee3-81d9-818ca6465a8e');
+    }
   }
 
   return (
