@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../_lib/supabase";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
+import { Button } from "@/components";
 
 interface Room {
   id: string;
@@ -30,12 +31,16 @@ export default function RoomsComponent({ rooms: roomsProp }: Props) {
         (payload: RealtimePostgresChangesPayload<Room>) => {
           setRooms((prev) => [...prev, (payload.new as Room)])
         })
-        .subscribe();
+      .subscribe();
 
     return () => {
       supabase.removeChannel(channel)
     }
   }, [setRooms]);
+
+  function handleClick(value: string) {
+    console.log("value", value);
+  }
 
   return (
     <section>
@@ -45,6 +50,16 @@ export default function RoomsComponent({ rooms: roomsProp }: Props) {
           <strong>{room.name}</strong>
         </article>
       ))}
+      <div>
+        <Button onClick={() => handleClick('1')}>1</Button>
+        <Button onClick={() => handleClick('2')}>2</Button>
+        <Button onClick={() => handleClick('3')}>3</Button>
+        <Button onClick={() => handleClick('5')}>5</Button>
+        <Button onClick={() => handleClick('8')}>8</Button>
+        <Button onClick={() => handleClick('13')}>13</Button>
+        <Button onClick={() => handleClick('?')}>?</Button>
+        <Button onClick={() => handleClick('cafe')}>cafe</Button>
+      </div>
     </section>
   );
 }
