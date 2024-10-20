@@ -1,6 +1,5 @@
 type Props = {
-  children: React.ReactNode,
-  isLoading?: boolean
+  children: React.ReactNode
 } & React.ComponentPropsWithoutRef<"button">;
 
 export default function Button({ 
