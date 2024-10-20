@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../_lib/supabase";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
-import { Button } from "@/components";
+import Link from "next/link";
 
 interface Room {
   id: string;
@@ -36,52 +36,18 @@ export default function RoomsComponent({ rooms: roomsProp }: Props) {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [setRooms]);
-
-  async function handleClick(value: string) {
-    const { data } = await supabase
-      .from('cards')
-      .select()
-      .eq('user', 'pablo')
-      .eq('room_id', 'a22ae03b-ba13-4ee3-81d9-818ca6465a8e');
-
-    if (!data?.length) {
-      // insert if not exist
-      await supabase
-        .from('cards')
-        .insert({ 
-          user: 'pablo', 
-          room_id: 'a22ae03b-ba13-4ee3-81d9-818ca6465a8e',
-          estimation: value
-        });
-    } else {
-      // update if exist
-      await supabase
-        .from('cards')
-        .update({ estimation: value })
-        .eq('user', 'pablo')
-        .eq('room_id', 'a22ae03b-ba13-4ee3-81d9-818ca6465a8e');
-    }
-  }
+  }, [setRooms]);  
 
   return (
     <section>
       <h1>Rooms available</h1>
       {rooms?.map((room) => (
         <article key={room.id}>
-          <strong>{room.name}</strong>
+          <Link href={`/rooms/${room.id}`}>
+            <strong>{room.name}</strong>
+          </Link>
         </article>
       ))}
-      <div>
-        <Button onClick={() => handleClick('1')}>1</Button>
-        <Button onClick={() => handleClick('2')}>2</Button>
-        <Button onClick={() => handleClick('3')}>3</Button>
-        <Button onClick={() => handleClick('5')}>5</Button>
-        <Button onClick={() => handleClick('8')}>8</Button>
-        <Button onClick={() => handleClick('13')}>13</Button>
-        <Button onClick={() => handleClick('?')}>?</Button>
-        <Button onClick={() => handleClick('cafe')}>cafe</Button>
-      </div>
     </section>
   );
 }
