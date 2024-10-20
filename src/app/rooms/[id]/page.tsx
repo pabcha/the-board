@@ -7,6 +7,7 @@ interface Props {
 
 export default async function Room({ params: { id } }: Props) {
   const { data: room } = await supabase.from('rooms').select().match({ id }).single();
-  if (!room) return;
-  return <RoomComponent room={room} />
+  const { data: cards } = await supabase.from('cards').select().match({ room_id: id });
+  if (!room || !cards) return;
+  return <RoomComponent room={room} cards={cards} />
 }
